@@ -1,4 +1,4 @@
-package config
+package database
 
 import (
 	"context"
@@ -10,8 +10,7 @@ import (
 
 var DB *pgxpool.Pool
 
-func Connect() {
-	dsn := "postgres://postgres:258456@localhost:5432/calculator"
+func Connect(dsn string) {
 
 	var err error
 	DB, err = pgxpool.New(context.Background(), dsn)
@@ -31,6 +30,10 @@ func Connect() {
 }
 
 func Close() {
+	if r := recover(); r != nil {
+		log.Fatal(r)
+	}
+
 	if DB != nil {
 		DB.Close()
 	}
